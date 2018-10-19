@@ -57,11 +57,11 @@ https://rickandmortyapi.com/api/character/
 ```
 
 ### BONUS POINT!
- - [X]Unit Test
- - [X]Design Pattern
- - [X]Tools
- - [X]Architecture Design pattern (MVC, MVP, MVVM, Clean Architecture, Redux and more)
- - [X]Clean Code
+ - [X] Unit Test
+ - [X] Design Pattern
+ - [X] Tools
+ - [X] Architecture Design pattern (MVC, MVP, MVVM, Clean Architecture, Redux and more)
+ - [X] Clean Code
 
 ## How to deliver ?
 ส่งผลงานได้โดย Fork repository นี้ แล้ว pull request หรือถ้าหากไม่ถนัด สามารถ compress แล้วส่งมาให้ทาง hr.creativeme@gmail.com ได้เลยจ้าา
