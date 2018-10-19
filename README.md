@@ -19,15 +19,6 @@ https://rickandmortyapi.com/api/character/
 ```
 นำออกมาแสดงผลเป็น List  แสดงชื่อและรูปภาพ และสามารถกดที่ List เพื่อ navigate ไปหน้าต่อไปสำหรับแสดงรายละเอียด Location ของตัวละครนั้นๆด้วย สามารถดึงข้อมูลจาก api ได้จาก url ใน json ได้เลย
 
-### BONUS POINT!
-
- - [ ] Unit Test
- - [ ] Design Pattern
- - [ ] Tools
- - [ ] Architecture Design pattern (MVC, MVP, MVVM, Clean Architecture, Redux and more)
- - [ ] Clean Code
-
-
 > Response Example
 
 ```json
@@ -60,11 +51,17 @@ https://rickandmortyapi.com/api/character/
       ],
       "url": "https://rickandmortyapi.com/api/character/361",
       "created": "2018-01-10T18:20:41.703Z"
-    },
-    // ...
+    }
   ]
 }
 ```
+
+### BONUS POINT!
+ - [X]Unit Test
+ - [X]Design Pattern
+ - [X]Tools
+ - [X]Architecture Design pattern (MVC, MVP, MVVM, Clean Architecture, Redux and more)
+ - [X]Clean Code
 
 ## How to deliver ?
 ส่งผลงานได้โดย Fork repository นี้ แล้ว pull request หรือถ้าหากไม่ถนัด สามารถ compress แล้วส่งมาให้ทาง hr.creativeme@gmail.com ได้เลยจ้าา
