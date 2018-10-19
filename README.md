@@ -66,6 +66,9 @@ https://rickandmortyapi.com/api/character/
 ## How to deliver ?
 ส่งผลงานได้โดย Fork repository นี้ แล้ว pull request หรือถ้าหากไม่ถนัด สามารถ compress แล้วส่งมาให้ทาง hr.creativeme@gmail.com ได้เลยจ้าา
 
+## Time Block
+ระยะเวลาส่งงาน ภายใน 7 วันหลังจากได้แบบทดสอบ
+
 ### หวังว่าจะได้ร่วมงานกันนะทุกคน ;)
 
 ![HOPE TO SEE YA ALL !](https://media.giphy.com/media/3ornk7TgUdhjhTYgta/giphy.gif)
