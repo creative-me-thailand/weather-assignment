@@ -116,4 +116,19 @@ class AvatarServiceTest {
             return@runBlocking
         }
     }
+
+    @Test(expected = NotFoundException::class)
+    fun `get location failed`() {
+        val input = GetLocationInput(
+                "1"
+        )
+
+        runBlocking {
+            `when`(characterRepo.getLocationDetail(input.id)).thenThrow(Errors.LocationNotFound)
+
+            avatarService.getLocation(input)
+
+            return@runBlocking
+        }
+    }
 }
