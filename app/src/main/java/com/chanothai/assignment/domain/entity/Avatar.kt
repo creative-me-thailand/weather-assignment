@@ -5,6 +5,7 @@ data class Avatars(
 )
 
 data class Avatar(
+        val id: Int,
         val name: String,
         val status: String,
         val species: String,
