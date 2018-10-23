@@ -1,18 +1,30 @@
 package com.chanothai.assignment.domain.usecase
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
 import com.chanothai.assignment.data.api.repository.CharacterRepo
-import com.chanothai.assignment.domain.entity.*
+import com.chanothai.assignment.domain.entity.api.Avatar
+import com.chanothai.assignment.domain.entity.api.Avatars
+import com.chanothai.assignment.domain.entity.api.Location
+import com.chanothai.assignment.domain.entity.api.Origin
+import com.chanothai.assignment.domain.entity.database.AvatarEntity
 import com.chanothai.assignment.domain.error.BadRequestException
 import com.chanothai.assignment.domain.error.Errors
 import com.chanothai.assignment.domain.error.NotFoundException
-import com.chanothai.assignment.domain.input.GetLocationInput
+import com.chanothai.assignment.domain.input.GetAvatarInput
+import com.chanothai.assignment.presenter.model.Resource
+import com.chanothai.assignment.presenter.model.ResourceState
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
+import org.junit.rules.TestRule
 import org.mockito.Mockito.*
 
 class AvatarServiceTest {
+    @get:Rule
+    var rule: TestRule = InstantTaskExecutorRule()
 
     private lateinit var avatarService: AvatarService
     private lateinit var characterRepo: CharacterRepo
@@ -23,7 +35,7 @@ class AvatarServiceTest {
     }
 
     @Test
-    fun `get all character success`() {
+    fun `get avatars success`() {
         val avatarEXP = Avatars(
                 mutableListOf(
                         Avatar(
@@ -69,7 +81,7 @@ class AvatarServiceTest {
     }
 
     @Test(expected = NotFoundException::class)
-    fun `get all avatar Failed`() {
+    fun `get avatars Failed`() {
 
         runBlocking {
             `when`(characterRepo.getAll()).thenThrow(Errors.AvatarNotFound)
@@ -80,55 +92,57 @@ class AvatarServiceTest {
         }
     }
 
-
     @Test
-    fun `get location success`() {
-        val input = GetLocationInput(
-                "1"
-        )
+    fun `get avatar Success`(){
+        val input = GetAvatarInput("1")
 
-        val locationExp = LocationDetail(
-                1,
-                "Abadngo"
-        )
+        val resource = Resource<AvatarEntity>(ResourceState.SUCCESS).apply {
+            this.data = AvatarEntity(1)
+        }
+
+        val mResource = MutableLiveData<Resource<AvatarEntity>>()
+        mResource.value = resource
 
         runBlocking {
-            `when`(characterRepo.getLocationDetail(input.id)).thenReturn(locationExp)
 
-            val result = avatarService.getLocation(input)
+            `when`(characterRepo.get(input.id)).thenReturn(mResource)
 
-            assertEquals(locationExp, result)
-            verify(characterRepo).getLocationDetail(input.id)
+            val result = avatarService.getAvatar(input).value
+
+            assertEquals(resource, result)
+
+            verify(characterRepo).get(input.id)
+
+            return@runBlocking
+        }
+    }
+
+    @Test
+    fun `get avatar Failed`() {
+        val input = GetAvatarInput("1")
+
+        val resource = Resource<AvatarEntity>(ResourceState.FAILED).apply {
+            this.errorMessage = Errors.AvatarNotFound.message
+        }
+
+        runBlocking {
+            `when`(characterRepo.get(input.id)).thenThrow(Errors.AvatarNotFound)
+
+            val result = avatarService.getAvatar(input).value
+
+            assertEquals(resource, result)
+
+            verify(characterRepo).get(input.id)
 
             return@runBlocking
         }
     }
 
     @Test(expected = BadRequestException::class)
-    fun `get location then input invalid`() {
-        val input = GetLocationInput(
-                ""
-        )
-
+    fun `get avatar when input invalid`() {
+        val input = GetAvatarInput("")
         runBlocking {
-            avatarService.getLocation(input)
-
-            return@runBlocking
-        }
-    }
-
-    @Test(expected = NotFoundException::class)
-    fun `get location failed`() {
-        val input = GetLocationInput(
-                "1"
-        )
-
-        runBlocking {
-            `when`(characterRepo.getLocationDetail(input.id)).thenThrow(Errors.LocationNotFound)
-
-            avatarService.getLocation(input)
-
-            return@runBlocking
+            avatarService.getAvatar(input)
         }
     }
 }

@@ -3,8 +3,8 @@ package com.chanothai.assignment.presenter.ui.avatar.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.chanothai.assignment.domain.entity.Resource
-import com.chanothai.assignment.domain.entity.ResourceState
+import com.chanothai.assignment.presenter.model.Resource
+import com.chanothai.assignment.presenter.model.ResourceState
 import com.chanothai.assignment.domain.usecase.AvatarService
 import com.chanothai.assignment.presenter.model.AvatarModel
 import com.chanothai.assignment.presenter.model.AvatarsModel

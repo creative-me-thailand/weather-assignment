@@ -9,5 +9,7 @@ class InternalException(override val message: String): RuntimeException(message)
 object Errors {
     var AvatarNotFound = NotFoundException("Avatar does not found")
     var LocationNotFound = NotFoundException("Location does not found")
-    var InvalidInputLocation = BadRequestException("ID does not bank or empty")
+    var InvalidInputGetAavatar = BadRequestException("ID does not bank or empty")
+    var UnableCreateDatabase = InternalException("Unable create database")
+    var UnableQueryData = InternalException("Unable query data")
 }

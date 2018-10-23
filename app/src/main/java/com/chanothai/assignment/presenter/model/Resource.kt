@@ -1,4 +1,4 @@
-package com.chanothai.assignment.domain.entity
+package com.chanothai.assignment.presenter.model
 
 enum class ResourceState {
     SUCCESS, FAILED

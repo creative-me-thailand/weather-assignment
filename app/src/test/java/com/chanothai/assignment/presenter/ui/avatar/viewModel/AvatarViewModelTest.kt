@@ -1,11 +1,16 @@
 package com.chanothai.assignment.presenter.ui.avatar.viewModel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.chanothai.assignment.domain.entity.*
+import com.chanothai.assignment.domain.entity.api.Avatar
+import com.chanothai.assignment.domain.entity.api.Avatars
+import com.chanothai.assignment.domain.entity.api.Location
+import com.chanothai.assignment.domain.entity.api.Origin
 import com.chanothai.assignment.domain.error.Errors
 import com.chanothai.assignment.domain.usecase.AvatarService
 import com.chanothai.assignment.presenter.model.AvatarModel
 import com.chanothai.assignment.presenter.model.AvatarsModel
+import com.chanothai.assignment.presenter.model.Resource
+import com.chanothai.assignment.presenter.model.ResourceState
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before

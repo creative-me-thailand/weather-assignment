@@ -1,40 +1,60 @@
 package com.chanothai.assignment.presenter.ui.avatarDetail.viewModel
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.chanothai.assignment.domain.entity.Resource
-import com.chanothai.assignment.domain.entity.ResourceState
-import com.chanothai.assignment.domain.input.GetLocationInput
+import androidx.lifecycle.*
+import com.chanothai.assignment.presenter.model.Resource
+import com.chanothai.assignment.presenter.model.ResourceState
+import com.chanothai.assignment.domain.input.GetAvatarInput
 import com.chanothai.assignment.domain.usecase.AvatarService
 import com.chanothai.assignment.presenter.model.AvatarDetailModel
-import com.chanothai.assignment.presenter.model.AvatarsModel
 import java.lang.Exception
 
 class AvatarDetailViewModel(
         private val avatarService: AvatarService
-): ViewModel() {
+) : ViewModel() {
 
-    private val mAvatarDetail = MutableLiveData<Resource<AvatarDetailModel>>()
+    private var mResource = MutableLiveData<Resource<AvatarDetailModel>>()
     val avatarDetailLiveData: LiveData<Resource<AvatarDetailModel>>
-    get() = mAvatarDetail
+    get() = mResource
 
-    suspend fun loadLocation(input: GetLocationInput) {
+    suspend fun getAvatar(input: GetAvatarInput) {
         try {
-            val location = avatarService.getLocation(input)
+            val resourceRoom = avatarService.getAvatar(input).value
+            when(resourceRoom?.status) {
+                ResourceState.SUCCESS -> {
+                    resourceRoom.data?.let {
+                        return@let Resource<AvatarDetailModel>(ResourceState.SUCCESS).apply {
+                            this.data = AvatarDetailModel(it.location ?: "").apply {
+                                this.id = it.id.toString()
+                                this.name = it.name
+                                this.image = it.image
+                                this.status = it.status
+                                this.species = it.species
+                                this.gender = it.gender
+                                this.origin = it.origin
+                                this.created = it.created
+                            }
+                        }
 
-            val avatarDetailModel = AvatarDetailModel(location.name)
-            val resource = Resource<AvatarDetailModel>(ResourceState.SUCCESS).apply {
-                this.data = avatarDetailModel
+
+                    }?.also {resourceAvatar->
+                        mResource.value = resourceAvatar
+                    }
+                }
+
+                ResourceState.FAILED -> {
+                    val resource = Resource<AvatarDetailModel>(ResourceState.FAILED).apply {
+                        this.errorMessage = resourceRoom.errorMessage
+                    }
+
+                    mResource.value = resource
+                }
             }
-
-            mAvatarDetail.value = resource
         }catch (e: Exception) {
             val resource = Resource<AvatarDetailModel>(ResourceState.FAILED).apply {
                 this.errorMessage = e.message
             }
 
-            mAvatarDetail.value = resource
+            mResource.value = resource
         }
     }
 }

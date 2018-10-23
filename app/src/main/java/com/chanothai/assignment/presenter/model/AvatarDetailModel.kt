@@ -6,6 +6,7 @@ data class AvatarDetailModel(
 ) {
     var id: String? = null
     var name: String? = null
+    var image: String? = null
     var status: String? = null
     var species: String? = null
     var gender: String? = null

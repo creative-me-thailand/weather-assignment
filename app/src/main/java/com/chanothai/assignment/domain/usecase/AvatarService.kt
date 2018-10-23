@@ -1,10 +1,15 @@
 package com.chanothai.assignment.domain.usecase
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.chanothai.assignment.data.api.repository.CharacterRepo
-import com.chanothai.assignment.domain.entity.Avatars
-import com.chanothai.assignment.domain.entity.LocationDetail
+import com.chanothai.assignment.domain.entity.api.Avatars
+import com.chanothai.assignment.domain.entity.database.AvatarEntity
 import com.chanothai.assignment.domain.error.Errors
-import com.chanothai.assignment.domain.input.GetLocationInput
+import com.chanothai.assignment.domain.error.NotFoundException
+import com.chanothai.assignment.domain.input.GetAvatarInput
+import com.chanothai.assignment.presenter.model.Resource
+import com.chanothai.assignment.presenter.model.ResourceState
 
 class AvatarService(
         private val avatarRepo: CharacterRepo
@@ -13,11 +18,24 @@ class AvatarService(
         return avatarRepo.getAll()
     }
 
-    suspend fun getLocation(input: GetLocationInput): LocationDetail {
-        if (input.id.isBlank() || input.id.isEmpty()) {
-            throw Errors.InvalidInputLocation
-        }
+    suspend fun getAvatar(input: GetAvatarInput): LiveData<Resource<AvatarEntity>> {
+        return try {
+            if (input.id.isBlank() || input.id.isEmpty()) {
+                throw Errors.InvalidInputGetAavatar
+            }
 
-        return avatarRepo.getLocationDetail(input.id)
+            val result = avatarRepo.get(input.id).value
+
+            MutableLiveData<Resource<AvatarEntity>>().apply {
+                this.value = result
+            }
+        } catch (e: NotFoundException) {
+            val mAvatar = MutableLiveData<Resource<AvatarEntity>>()
+            mAvatar.value = Resource<AvatarEntity>(ResourceState.FAILED).apply {
+                this.errorMessage = e.message
+            }
+
+            mAvatar
+        }
     }
 }

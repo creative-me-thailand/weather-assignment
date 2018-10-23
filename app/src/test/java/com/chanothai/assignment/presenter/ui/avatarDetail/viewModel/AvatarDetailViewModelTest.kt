@@ -1,92 +1,120 @@
 package com.chanothai.assignment.presenter.ui.avatarDetail.viewModel
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.chanothai.assignment.domain.entity.LocationDetail
-import com.chanothai.assignment.domain.entity.Resource
-import com.chanothai.assignment.domain.entity.ResourceState
+import androidx.lifecycle.*
+import com.chanothai.assignment.domain.entity.database.AvatarEntity
 import com.chanothai.assignment.domain.error.Errors
-import com.chanothai.assignment.domain.input.GetLocationInput
+import com.chanothai.assignment.domain.input.GetAvatarInput
 import com.chanothai.assignment.domain.usecase.AvatarService
 import com.chanothai.assignment.presenter.model.AvatarDetailModel
+import com.chanothai.assignment.presenter.model.Resource
+import com.chanothai.assignment.presenter.model.ResourceState
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
+import org.mockito.Mock
 import org.mockito.Mockito.*
+import org.mockito.MockitoAnnotations
 
 class AvatarDetailViewModelTest {
     @get:Rule
     var rule: TestRule = InstantTaskExecutorRule()
 
-    private lateinit var avatarService: AvatarService
-    private lateinit var avatarDetailViewModel: AvatarDetailViewModel
+
+    @Mock private lateinit var avatarService: AvatarService
+    private lateinit var viewModel: AvatarDetailViewModel
 
     @Before
     fun setup() {
-        avatarService = mock(AvatarService::class.java)
-        avatarDetailViewModel = AvatarDetailViewModel(avatarService)
+        MockitoAnnotations.initMocks(this)
+        viewModel = AvatarDetailViewModel(avatarService)
     }
 
     @Test
-    fun loadLocationSuccess() {
-        val input = GetLocationInput(
-                "1"
-        )
+    fun `load avatar success`() {
+        val input = GetAvatarInput("1")
 
-        val location = LocationDetail(
-                input.id.toInt(),
-                "Bangkok"
-        )
-
-        val avatarDetailModel = AvatarDetailModel(
-                location.name
-        )
-
-        val resourceExp = Resource<AvatarDetailModel>(ResourceState.SUCCESS).apply {
-            this.data = avatarDetailModel
+        val rsEntity = Resource<AvatarEntity>(ResourceState.SUCCESS).apply {
+            this.data = AvatarEntity(1).apply {
+                location = "bangkok"
+            }
         }
 
+        val mResource = MutableLiveData<Resource<AvatarEntity>>()
+        mResource.postValue(rsEntity)
+
         runBlocking {
-            `when`(avatarService.getLocation(input)).thenReturn(location)
+            `when`(avatarService.getAvatar(input)).thenReturn(mResource)
 
-            avatarDetailViewModel.loadLocation(input)
+            viewModel.getAvatar(input)
 
-            val result = avatarDetailViewModel.avatarDetailLiveData.value
+            val result = viewModel.avatarDetailLiveData.value
+
+            val resourceExp = Resource<AvatarDetailModel>(ResourceState.SUCCESS).apply {
+                this.data = AvatarDetailModel("bangkok").apply {
+                    this.id = "1"
+                }
+            }
 
             assertEquals(resourceExp, result)
 
-            verify(avatarService).getLocation(input)
+            verify(avatarService).getAvatar(input)
 
             return@runBlocking
         }
     }
 
     @Test
-    fun loadLocationFailed() {
-        val input = GetLocationInput(
-                "1"
-        )
+    fun `load avatar failed`() {
+        val input = GetAvatarInput("0")
 
-        val resourceExp = Resource<AvatarDetailModel>(ResourceState.FAILED).apply {
-            this.errorMessage = Errors.LocationNotFound.message
+        val rsEntity = Resource<AvatarEntity>(ResourceState.FAILED).apply {
+            this.errorMessage = Errors.AvatarNotFound.message
         }
 
+        val mResource = MutableLiveData<Resource<AvatarEntity>>()
+        mResource.postValue(rsEntity)
+
         runBlocking {
-            `when`(avatarService.getLocation(input)).thenThrow(Errors.LocationNotFound)
+            `when`(avatarService.getAvatar(input)).thenReturn(mResource)
 
-            avatarDetailViewModel.loadLocation(input)
+            viewModel.getAvatar(input)
 
-            val result = avatarDetailViewModel.avatarDetailLiveData.value
+            val result = viewModel.avatarDetailLiveData.value
+
+            val resourceExp = Resource<AvatarDetailModel>(ResourceState.FAILED).apply {
+                this.errorMessage = rsEntity.errorMessage
+            }
 
             assertEquals(resourceExp, result)
 
-            verify(avatarService).getLocation(input)
+            verify(avatarService).getAvatar(input)
 
             return@runBlocking
         }
     }
 
+    @Test
+    fun `load avatar but input invalid`() {
+        val input = GetAvatarInput("")
 
+        runBlocking {
+            viewModel.getAvatar(input)
+
+            val result = viewModel.avatarDetailLiveData.value
+
+            val resourceExp = Resource<AvatarDetailModel>(ResourceState.FAILED).apply {
+                this.errorMessage = Errors.InvalidInputGetAavatar.message
+            }
+
+            assertEquals(resourceExp, result)
+
+            verify(avatarService).getAvatar(input)
+
+            return@runBlocking
+        }
+    }
 }

@@ -1,4 +1,4 @@
-package com.chanothai.assignment.domain.entity
+package com.chanothai.assignment.domain.entity.api
 
 data class Avatars(
         val results: MutableList<Avatar>

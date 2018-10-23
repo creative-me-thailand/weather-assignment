@@ -1,5 +1,5 @@
 package com.chanothai.assignment.domain.input
 
-data class GetLocationInput(
+data class GetAvatarInput(
         val id: String
 )
