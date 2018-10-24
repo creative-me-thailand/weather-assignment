@@ -62,6 +62,7 @@ class AvatarViewModelTest {
         )
 
         val avatarModel = AvatarModel(
+                avatars.results[0].id.toString(),
                 avatars.results[0].name,
                 avatars.results[0].image)
 

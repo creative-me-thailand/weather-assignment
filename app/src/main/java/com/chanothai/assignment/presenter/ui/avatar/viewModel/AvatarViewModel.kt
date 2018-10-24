@@ -25,6 +25,7 @@ class AvatarViewModel(
             val listAvatar = arrayListOf<AvatarModel>()
             avatars.results.forEachIndexed { index, avatar ->
                 val avatarModel = AvatarModel(
+                        avatar.id.toString(),
                         avatar.name,
                         avatar.image)
 
