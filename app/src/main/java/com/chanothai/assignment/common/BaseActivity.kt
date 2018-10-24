@@ -40,7 +40,7 @@ abstract class BaseActivity: AppCompatActivity() {
     }
 
     fun updateTitleToolbar(title: String) {
-        toolbar.title = title
+        getToolbarInstance()?.title = title
     }
 
     abstract fun isDisplayHomeEnable(): Boolean
