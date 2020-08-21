@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.appbar.CollapsingToolbarLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_scrollFlags="scroll|exitUntilCollapsed"
+    app:layout_scrollInterpolator="@android:anim/decelerate_interpolator"
+    app:contentScrim="@color/colorPrimary">
+
+    <ImageView
+        android:id="@+id/avatar_img_header"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_background"
+        android:contentDescription="@string/content_description_image"/>
+
+    <include layout="@layout/toolbar_layout_default"/>
+
+</com.google.android.material.appbar.CollapsingToolbarLayout>
