@@ -64,7 +64,7 @@ https://rickandmortyapi.com/api/character/
  - [X] Clean Code
 
 ## How to deliver ?
-ส่งผลงานได้โดย Fork repository นี้ แล้ว pull request หรือถ้าหากไม่ถนัด สามารถ compress แล้วส่งมาให้ทาง hr@creativeme.co.th ได้เลยจ้าา
+ส่งผลงานได้โดย Fork repository นี้ แล้ว pull request หรือถ้าหากไม่ถนัด สามารถ compress แล้วส่งมาให้ทาง suchai.f@creativeme.co.th ได้เลยจ้าา
 
 ## Time Block
 ระยะเวลาส่งงาน ภายใน 7 วันหลังจากได้แบบทดสอบ
